@@ -70,7 +70,16 @@ class MarcoServidor extends JFrame implements Runnable{
 			ip=mensaje_recibido.getIp();
 			texto=mensaje_recibido.getTexto();
 			
-			areatexto.append("\n"+nick+": "+texto+" para "+ip);
+			areatexto.append("\n"+nick+": "+texto+" (para "+ip+")");
+			
+			//Socket para enviar los datos al destinatario
+			Socket destinatario=new Socket(ip,9090);
+			//Para enviar el paquete
+			ObjectOutputStream mensaje_saliente=new ObjectOutputStream(destinatario.getOutputStream());
+			//Mete los datos recibidos en el paquete saliente
+			mensaje_saliente.writeObject(mensaje_recibido);
+			//Cierra el socket que comunica el puerto de salida
+			destinatario.close();
 			
 			//Cierra la conexion
 			misocket.close();

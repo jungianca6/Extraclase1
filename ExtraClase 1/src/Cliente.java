@@ -88,10 +88,10 @@ class LaminaMarcoCliente extends JPanel{
 				mensaje.setTexto(campo1.getText());
 				
 				//Crea un flujo de datos para poder enviarlo al servidor
-				ObjectOutputStream paquete_mensaje=new ObjectOutputStream(misocket.getOutputStream());
+				ObjectOutputStream mensaje_envio=new ObjectOutputStream(misocket.getOutputStream());
 				
 				//Escribe los datos contenidos en las variables en el flujo
-				paquete_mensaje.writeObject(mensaje);
+				mensaje_envio.writeObject(mensaje);
 				
 				misocket.close();
 				
