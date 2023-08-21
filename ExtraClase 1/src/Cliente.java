@@ -33,7 +33,7 @@ class MarcoCliente extends JFrame{
 	
 }
 
-class LaminaMarcoCliente extends JPanel{
+class LaminaMarcoCliente extends JPanel implements Runnable {
 	
 	public LaminaMarcoCliente(){
 		
@@ -64,6 +64,10 @@ class LaminaMarcoCliente extends JPanel{
 		miboton.addActionListener(mievento);
 		
 		add(miboton);	
+		
+		Thread hilo=new Thread(this);
+		
+		hilo.start();
 		
 	}
 	
@@ -117,11 +121,38 @@ class LaminaMarcoCliente extends JPanel{
 	private JTextArea chat;
 	
 	private JButton miboton;
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			ServerSocket conexion_cliente=new ServerSocket(9090);
+			Socket cliente;
+			Envio recibido;
+			
+			//para que este siempre escuchando el puerto
+			while(true) {
+				cliente=conexion_cliente.accept();
+				//Crea el flujo de entrada para el paquete de datos
+				ObjectInputStream entrante= new ObjectInputStream(cliente.getInputStream());
+				//Lee el paquete de datos
+				recibido=(Envio) entrante.readObject();
+				//Muestra el mensaje
+				chat.append("/n"+recibido.getNick()+": "+recibido.getTexto());
+				
+			}
+			
+		}catch(Exception e) {
+			//Muestra los errores que pueda tener el hilo
+			System.out.println(e.getMessage());
+			
+		}
+	}
 	
 }
 /*Esta clase empaqueta todos los datos para así
   poder enviarlos
-  Se serelializa para poder enviar los datos a traves de la red*/
+  Se serializa para poder enviar los datos a traves de la red*/
 class Envio implements Serializable{
 	
 	private String nick,ip,texto;
