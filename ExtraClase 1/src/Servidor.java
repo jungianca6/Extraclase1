@@ -78,6 +78,7 @@ class MarcoServidor extends JFrame implements Runnable{
 			ObjectOutputStream mensaje_saliente=new ObjectOutputStream(destinatario.getOutputStream());
 			//Mete los datos recibidos en el paquete saliente
 			mensaje_saliente.writeObject(mensaje_recibido);
+			mensaje_saliente.close();
 			//Cierra el socket que comunica el puerto de salida
 			destinatario.close();
 			
