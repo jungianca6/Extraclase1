@@ -8,16 +8,16 @@ public class Cliente {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+		//mimarco es una instancia de marcocliente
 		MarcoCliente mimarco=new MarcoCliente();
-		
+		//Exit on close mata el proceso al cerrar la ventana
 		mimarco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
 
 }
 
-
+//Crea la ventana del cliente
 class MarcoCliente extends JFrame{
 	
 	public MarcoCliente(){
@@ -27,12 +27,12 @@ class MarcoCliente extends JFrame{
 		LaminaMarcoCliente milamina=new LaminaMarcoCliente();
 		
 		add(milamina);
-		
+		//Vuelve la ventana visible
 		setVisible(true);
 		}	
 	
 }
-
+//Runnable crea el hilo necesario para siempre escuchar el socket
 class LaminaMarcoCliente extends JPanel implements Runnable {
 	
 	public LaminaMarcoCliente(){
@@ -70,14 +70,20 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 		hilo.start();
 		
 	}
-	
+	/*ActionListener hace que al darle click al botón
+	 este empaquete los datos y los envié al servidor
+	 */
 	private class EnviaTexto implements ActionListener{
 
 		@Override
+		//Detecta que se pulso el botón y envía la señal a la clase Envio para que empaquete los datos 
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			//System.out.println(campo1.getText());
+			
 			try {
+				/*La Ip acá contenida es en donde se encuentra el servidor
+				 * cambiarla a la Ip del servidor que se quiera usar
+				 */
 				Socket misocket=new Socket("192.168.56.1", 9999);
 				
 				Envio mensaje=new Envio();
@@ -98,10 +104,11 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 				mensaje_envio.writeObject(mensaje);
 				
 				misocket.close();
-				
+			//Este catch determina que la Ip a la que se envían los datos no puede ser encontrada	
 			} catch (UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			//Captura el error que se puede dar en la entrada o salida al crear el socket
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				System.out.println(e1.getMessage());
@@ -115,7 +122,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 	
 		
 		
-		
+	//campo1 es la caja de texto donde se escribe el mensaje a enviar	
 	private JTextField campo1,nick,ip;
 	
 	private JTextArea chat;
@@ -123,6 +130,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable {
 	private JButton miboton;
 
 	@Override
+	//Crea el hilo necesario para que la ventana del cliente siempre escuche al socket
 	public void run() {
 		// TODO Auto-generated method stub
 		try {

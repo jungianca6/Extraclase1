@@ -8,15 +8,16 @@ public class Servidor  {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+		//mimarco es una instancia de marcoservidor
 		MarcoServidor mimarco=new MarcoServidor();
-		
+		//Exit on close mata el proceso al cerrar la ventana
 		mimarco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 	}	
 }
-
-class MarcoServidor extends JFrame implements Runnable{
+//Esta clase crea la ventana del servidor
+//Runnable crea el hilo necesario para siempre escuchar el socket
+class MarcoServidor extends JFrame implements Runnable{	
 	
 	public MarcoServidor(){
 		
@@ -31,11 +32,11 @@ class MarcoServidor extends JFrame implements Runnable{
 		milamina.add(areatexto,BorderLayout.CENTER);
 		
 		add(milamina);
-		
+		//Hace que siempre se muestre la ventana
 		setVisible(true);
-		
+		//añade el hilo a la ventana
 		Thread hilo=new Thread(this);
-		
+		//Inicializa el hilo
 		hilo.start();
 		
 		}
@@ -44,11 +45,11 @@ class MarcoServidor extends JFrame implements Runnable{
 
 	@Override
 	/*Este metodo mantiene abierto el puerto y lo escucha
-	  en segundo plano
+	  en segundo plano usando hilos
 	 */
 	public void run() {
 		// TODO Auto-generated method stub
-		//System.out.println("ESCUCHANDO");
+		
 		try {
 			//Abre el puerto
 			ServerSocket servidor=new ServerSocket(9999);
@@ -56,7 +57,7 @@ class MarcoServidor extends JFrame implements Runnable{
 			String nick,ip,texto;
 			
 			Envio mensaje_recibido;
-			
+			//Ciclo infinito para mantner siempre el socket abierto
 			while(true) {
 			
 			//Acepta las conexiones
@@ -69,7 +70,7 @@ class MarcoServidor extends JFrame implements Runnable{
 			nick=mensaje_recibido.getNick();
 			ip=mensaje_recibido.getIp();
 			texto=mensaje_recibido.getTexto();
-			
+			//Añade el texto a la ventana
 			areatexto.append("\n"+nick+": "+texto+" (para "+ip+")");
 			
 			//Socket para enviar los datos al destinatario
